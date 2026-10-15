@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Кишенька Всесвіту ✨</title>
+    <style>
+      :root {
+        --night: #17152d;
+        --gold: #f1d69a;
+        --cream: #fff8e9;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 22px;
+        color: var(--cream);
+        font-family: Georgia, serif;
+        background: radial-gradient(
+          ellipse at top,
+          #51416f,
+          #282044 42%,
+          var(--night) 85%
+        );
+      }
+      .app {
+        width: min(100%, 520px);
+        text-align: center;
+      }
+      .eyebrow {
+        color: var(--gold);
+        font: 12px Arial;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      h1 {
+        font-size: clamp(32px, 8vw, 48px);
+        font-weight: normal;
+        margin: 12px 0;
+      }
+      .subtitle {
+        color: #d4cde8;
+        line-height: 1.55;
+        margin: 0 auto 24px;
+        max-width: 360px;
+      }
+      .stage {
+        position: relative;
+        border: 1px solid #75638e;
+        border-radius: 28px;
+        padding: 25px 18px;
+        background: #ffffff0a;
+        box-shadow: 0 18px 60px #08071466;
+      }
+      .moon {
+        position: absolute;
+        right: 24px;
+        top: 18px;
+        font-size: 25px;
+        animation: float 4s infinite ease-in-out;
+      }
+      .apron-button {
+        border: 0;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 0 8px 8px;
+      }
+      .apron {
+        position: relative;
+        width: 190px;
+        height: 220px;
+        margin: auto;
+        filter: drop-shadow(0 12px 15px #08071466);
+        transition: transform 0.25s;
+      }
+      .apron-button:hover .apron {
+        transform: translateY(-5px) rotate(-1deg);
+      }
+      .apron-button:active .apron {
+        transform: scale(0.97);
+      }
+      .strap {
+        position: absolute;
+        top: 4px;
+        left: 70px;
+        width: 50px;
+        height: 42px;
+        border: 9px solid #c28b76;
+        border-bottom: 0;
+        border-radius: 25px 25px 0 0;
+      }
+      .bib {
+        position: absolute;
+        top: 28px;
+        left: 49px;
+        width: 92px;
+        height: 76px;
+        border-radius: 17px 17px 9px 9px;
+        background: linear-gradient(135deg, #b98180, #82566f);
+        border: 2px solid #e4b59e;
+      }
+      .skirt {
+        position: absolute;
+        top: 88px;
+        left: 15px;
+        width: 160px;
+        height: 125px;
+        clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%);
+        background: linear-gradient(135deg, #c48b83, #79516f);
+      }
+      .pocket {
+        position: absolute;
+        z-index: 2;
+        top: 125px;
+        left: 59px;
+        width: 72px;
+        height: 54px;
+        border: 2px solid #e7bca8;
+        border-radius: 7px 7px 18px 18px;
+        background: #a36e7b;
+      }
+      .pocket:before {
+        content: "✦";
+        color: #f7dfab;
+        font-size: 18px;
+        position: absolute;
+        top: 13px;
+        left: 27px;
+      }
+      .paper {
+        position: absolute;
+        z-index: 4;
+        width: 55px;
+        height: 65px;
+        left: 67px;
+        top: 111px;
+        border-radius: 4px;
+        background: #fff1ce;
+        box-shadow: 0 2px 10px #08071455;
+        transform: translateY(32px) rotate(8deg);
+        opacity: 0;
+        transition: all 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .paper:before {
+        content: "✧";
+        color: #a77951;
+        font-size: 25px;
+        position: absolute;
+        top: 17px;
+        left: 17px;
+      }
+      .revealed .paper {
+        opacity: 1;
+        transform: translateY(-72px) rotate(-8deg);
+      }
+      .tap-hint {
+        color: #e6d9ad;
+        font-size: 14px;
+      }
+      .fortune-card {
+        display: none;
+        margin: 23px auto 0;
+        padding: 22px 20px;
+        max-width: 390px;
+        color: #352746;
+        background: linear-gradient(145deg, #fff8e9, #f0e0fa);
+        border-radius: 18px;
+        animation: appear 0.5s ease both;
+      }
+      .fortune-card.visible {
+        display: block;
+      }
+      .fortune-symbol {
+        font-size: 28px;
+      }
+      .fortune-card h2 {
+        font-size: 25px;
+        font-weight: normal;
+        margin: 9px 0;
+      }
+      .fortune-card p {
+        font-size: 17px;
+        line-height: 1.55;
+        margin: 0;
+      }
+      .label {
+        margin-top: 15px;
+        color: #756581;
+        font: 11px Arial;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .action {
+        border: 1px solid var(--gold);
+        border-radius: 999px;
+        padding: 12px 18px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .primary {
+        background: var(--gold);
+        color: #28203d;
+      }
+      .secondary {
+        background: transparent;
+        color: var(--cream);
+      }
+      .note {
+        color: #bdb5d4;
+        font: 12px/1.5 Arial;
+        margin: 18px auto 0;
+        max-width: 370px;
+      }
+      @keyframes float {
+        50% {
+          transform: translateY(-7px);
+        }
+      }
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <div class="eyebrow">маленька магія щодня</div>
+      <h1>Кишенька Всесвіту</h1>
+      <p class="subtitle">
+        У чарівному фартушку заховане послання саме для тебе. Натисни — і
+        дізнайся, що шепочуть зорі.
+      </p>
+      <section class="stage">
+        <div class="moon">☾</div>
+        <button
+          class="apron-button"
+          id="drawButton"
+          aria-label="Витягнути передбачення"
+        >
+          <div class="apron" id="apron">
+            <div class="strap"></div>
+            <div class="bib"></div>
+            <div class="skirt"></div>
+            <div class="pocket"></div>
+            <div class="paper"></div>
+          </div>
+          <p class="tap-hint">✧ Натисни на фартушок ✧</p>
+        </button>
+        <div class="fortune-card" id="card" aria-live="polite">
+          <div class="fortune-symbol" id="symbol">✨</div>
+          <h2 id="title"></h2>
+          <p id="text"></p>
+          <div class="label">твоє послання на сьогодні</div>
+        </div>
+        <div class="actions">
+          <button class="action primary" id="another">
+            Витягнути передбачення ✨</button
+          ><button class="action secondary" id="share" hidden>
+            Поділитися
+          </button>
+        </div>
+      </section>
+    </main>
+    <script>
+      const fortunes = [
+        ["💗", "Наша красунечка", "Ми тебе дуже-дуже любимо."],
+        [
+          "🌷",
+          "Ми тобою пишаємося",
+          "Мамулічко, ми так пишаємося тобою! Твоєю добротою, силою, турботою й тим, яка ти чудова людина.",
+        ],
+        [
+          "👑",
+          "Наша королева",
+          "Сьогодні нагадування для нашої королеви: ти заслуговуєш на найніжніші слова, щирі обійми й багато любові.",
+        ],
+        [
+          "🫶",
+          "Ти — наше сонечко",
+          "Мамулічко, поруч із тобою світліше й тепліше. Дякуємо, що ти є в нашому житті.",
+        ],
+        [
+          "✨",
+          "Ти неймовірна",
+          "Ми хочемо, щоб ти частіше бачила себе нашими очима: красиву, мудру, добру й неймовірно рідну.",
+        ],
+        [
+          "🌸",
+          "Твоя усмішка — скарб",
+          "Нехай сьогодні буде причина усміхнутися. Твоя усмішка для нас — одна з наймиліших речей у світі.",
+        ],
+        [
+          "💌",
+          "Тебе дуже люблять",
+          "Якщо раптом сьогодні забудеш, ось тобі нагадування: ти наша найрідніша мамулічка, і ми любимо тебе безмежно.",
+        ],
+        [
+          "🥰",
+          "Найкраща мамулічка",
+          "Нам дуже пощастило, що саме ти наша мама. Обіймаємо тебе подумки й надсилаємо мільйон поцілунків.",
+        ],
+        [
+          "🌟",
+          "Ти можеш усім пишатися",
+          "Мамулічко, озирнися на все, що ти пройшла й зробила. У тобі стільки сили, мудрості й любові. Ми захоплюємося тобою.",
+        ],
+        [
+          "🧸",
+          "Сьогодні тебе обіймають",
+          "Уяви, що ми міцно-міцно тебе обіймаємо. Нехай це тепло залишиться з тобою на весь день.",
+        ],
+        [
+          "💐",
+          "Ти заслуговуєш на квіти",
+          "Мамулічко, тобі пасують квіти, компліменти й щасливі моменти. Нехай сьогодні трапиться щось красиве саме для тебе.",
+        ],
+        [
+          "☀️",
+          "Наша улюблена красунечка",
+          "Навіть якщо день почався неідеально, пам’ятай: для нас ти все одно наймиліша, найрідніша й найпрекрасніша.",
+        ],
+        [
+          "🤍",
+          "Дякуємо, що ти є",
+          "За твою турботу, за тепло, за твоє велике серце — дякуємо. Ми помічаємо це й дуже цінуємо тебе.",
+        ],
+        [
+          "🪻",
+          "Ти особлива",
+          "У світі немає іншої такої, як ти. Твій характер, твої жарти, твоя ніжність — усе це робить тебе нашою неповторною мамулічкою.",
+        ],
+        [
+          "🎀",
+          "Сьогодні — день компліментів",
+          "Ось тобі комплімент від нас: ти прекрасна. І ще один: ми дуже пишаємося тобою. І ще один: ти неймовірно дорога нам.",
+        ],
+        [
+          "🍯",
+          "Трохи солоденького для душі",
+          "Мамулічко, нехай сьогодні буде щось смачненьке, теплий чай і думка про те, як сильно тебе люблять.",
+        ],
+        [
+          "🦋",
+          "Ти розквітаєш по-своєму",
+          "Не поспішай і не порівнюй себе ні з ким. Ти прекрасна саме така, як є, і ми раді бачити, як ти живеш та розквітаєш.",
+        ],
+        [
+          "💖",
+          "Наша гордість",
+          "Ми пишаємося не лише тим, що ти робиш, а й тим, яка ти є. Твоє добре серце — наша особлива гордість.",
+        ],
+        [
+          "🌈",
+          "Ти заслуговуєш на щастя",
+          "Мамулічко, нехай у твоєму житті буде більше приводів сміятися, мріяти, відпочивати й відчувати себе по-справжньому щасливою.",
+        ],
+        [
+          "🕯️",
+          "Вечір затишку для тебе",
+          "Сьогодні дозволь собі відпочити. Ти стільки тепла даруєш іншим — нехай і до тебе повернеться ніжність.",
+        ],
+        [
+          "🌹",
+          "Ти прекрасна не лише сьогодні",
+          "Краса твоя — у погляді, усмішці, словах і доброті. Але сьогодні ми все одно офіційно нагадуємо: ти наша красунечка!",
+        ],
+        [
+          "🐝",
+          "Твоя турбота має значення",
+          "Те, скільки любові ти вкладаєш у близьких, не залишається непоміченим. Ми вдячні тобі більше, ніж можемо сказати.",
+        ],
+        [
+          "🎶",
+          "Нехай сьогодні буде легко",
+          "Мамулічко, увімкни улюблену пісню, усміхнись і пам’ятай: ти не мусиш усе тягнути на собі. Ми тебе любимо й цінуємо.",
+        ],
+        [
+          "🧁",
+          "Побалуй нашу красунечку",
+          "Сьогодні тобі можна все хороше: улюблений десерт, маленьку покупку чи довгий відпочинок. Бо наша мамулічка цього варта.",
+        ],
+        [
+          "🌻",
+          "Ти робиш наш світ теплішим",
+          "З тобою в нашому житті більше любові, спогадів і затишку. Ми дуже щасливі, що ти в нас є.",
+        ],
+        [
+          "🫧",
+          "Не забувай про себе",
+          "Ти заслуговуєш на ту саму турботу, яку так щедро даруєш іншим. Сьогодні зроби щось приємне саме для себе, наша люба.",
+        ],
+        [
+          "💎",
+          "Ти — справжній скарб",
+          "Мамулічко, ти безцінна для нас. Жодні справи чи подарунки не зрівняються з тим, що ти просто є поруч.",
+        ],
+        [
+          "🌺",
+          "Ти сильна й ніжна водночас",
+          "Ми захоплюємося тим, як ти вмієш любити, підтримувати й знаходити сили. Але пам’ятай: поруч із нами тобі теж можна спертися на когось.",
+        ],
+        [
+          "📨",
+          "Передаємо любов поштою Всесвіту",
+          "Термінове послання для мамулічки: тебе міцно обіймають, безмежно люблять і дуже-дуже цінують. Доставка — просто зараз!",
+        ],
+        [
+          "✨",
+          "І ще одне: ми тебе любимо",
+          "Нехай це передбачення буде останнім на сьогодні, але не останнім нагадуванням. Мамулічко, ми пишаємося тобою, захоплюємося тобою й любимо тебе всім серцем.",
+        ],
+      ];
+      let last = -1,
+        current = null;
+      const apron = document.querySelector("#apron"),
+        card = document.querySelector("#card"),
+        share = document.querySelector("#share");
+      function draw() {
+        let i;
+        do {
+          i = Math.floor(Math.random() * fortunes.length);
+        } while (i === last);
+        last = i;
+        current = fortunes[i];
+        apron.classList.remove("revealed");
+        card.classList.remove("visible");
+        void apron.offsetWidth;
+        apron.classList.add("revealed");
+        setTimeout(() => {
+          document.querySelector("#symbol").textContent = current[0];
+          document.querySelector("#title").textContent = current[1];
+          document.querySelector("#text").textContent = current[2];
+          card.classList.add("visible");
+          share.hidden = false;
+        }, 350);
+      }
+      document.querySelector("#drawButton").addEventListener("click", draw);
+      document.querySelector("#another").addEventListener("click", draw);
+      share.addEventListener("click", async () => {
+        const message = `✨ Моє послання від «Кишеньки Всесвіту» ✨\n${current[1]}\n${current[2]}`;
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Кишенька Всесвіту",
+              text: message,
+            });
+          } catch (e) {}
+        } else {
+          try {
+            await navigator.clipboard.writeText(message);
+            share.textContent = "Скопійовано ✓";
+          } catch (e) {
+            alert(message);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
